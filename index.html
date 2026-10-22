@@ -1,0 +1,309 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CodeAlpha Basic Chatbot</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #eef2ff;
+      color: #1e293b;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .chat-container {
+      width: 100%;
+      max-width: 650px;
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 10px 35px rgba(15, 23, 42, 0.15);
+    }
+
+    .header {
+      background: #2563eb;
+      color: white;
+      padding: 22px;
+      text-align: center;
+    }
+
+    .header h1 {
+      margin: 0 0 8px;
+      font-size: 26px;
+    }
+
+    .header p {
+      margin: 0;
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    .student-details {
+      padding: 12px 18px;
+      background: #eff6ff;
+      border-bottom: 1px solid #dbeafe;
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    #chat-box {
+      height: 350px;
+      padding: 18px;
+      overflow-y: auto;
+      background: #f8fafc;
+    }
+
+    .message {
+      margin: 10px 0;
+      padding: 11px 14px;
+      border-radius: 12px;
+      max-width: 85%;
+      overflow-wrap: anywhere;
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+
+    .bot {
+      background: #e2e8f0;
+      color: #1e293b;
+      margin-right: auto;
+      border-bottom-left-radius: 3px;
+    }
+
+    .user {
+      background: #2563eb;
+      color: white;
+      margin-left: auto;
+      border-bottom-right-radius: 3px;
+    }
+
+    .input-area {
+      display: flex;
+      gap: 10px;
+      padding: 15px;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    #user-input {
+      flex: 1;
+      min-width: 0;
+      padding: 13px;
+      border: 1px solid #cbd5e1;
+      border-radius: 9px;
+      font-size: 15px;
+      outline: none;
+    }
+
+    #user-input:focus {
+      border-color: #2563eb;
+    }
+
+    button {
+      border: none;
+      border-radius: 9px;
+      padding: 12px 18px;
+      background: #2563eb;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #1d4ed8;
+    }
+
+    .controls {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      padding: 0 15px 15px;
+    }
+
+    .controls button {
+      background: #e2e8f0;
+      color: #334155;
+    }
+
+    .controls button:hover {
+      background: #cbd5e1;
+    }
+
+    footer {
+      padding: 13px;
+      text-align: center;
+      background: #f1f5f9;
+      color: #64748b;
+      font-size: 12px;
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 10px;
+      }
+
+      .header h1 {
+        font-size: 22px;
+      }
+
+      #chat-box {
+        height: 330px;
+      }
+
+      .input-area {
+        gap: 6px;
+        padding: 10px;
+      }
+
+      .input-area button {
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="chat-container">
+    <header class="header">
+      <h1>CodeAlpha Basic Chatbot</h1>
+      <p>A simple rule-based chatbot</p>
+    </header>
+
+    <section class="student-details">
+      <strong>Project:</strong> CodeAlpha Basic Chatbot<br>
+      <strong>Course:</strong> B.Tech (CSE)<br>
+      <strong>College:</strong> IIMT College of Engineering
+    </section>
+
+    <div id="chat-box" aria-live="polite"></div>
+
+    <form class="input-area" id="chat-form">
+      <input
+        type="text"
+        id="user-input"
+        placeholder="Type your message..."
+        autocomplete="off"
+        aria-label="Your message"
+        required
+      >
+      <button type="submit">Send</button>
+    </form>
+
+    <div class="controls">
+      <button type="button" id="clear-chat">Clear Chat</button>
+    </div>
+
+    <footer>
+      CodeAlpha Project | Basic Rule-Based Chatbot
+    </footer>
+  </main>
+
+  <script>
+    const chatBox = document.getElementById("chat-box");
+    const chatForm = document.getElementById("chat-form");
+    const userInput = document.getElementById("user-input");
+
+    function addMessage(message, sender) {
+      const element = document.createElement("div");
+      element.className = "message " + sender;
+      element.textContent = message;
+      chatBox.appendChild(element);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function getBotResponse(input) {
+      const message = input.toLowerCase().trim();
+
+      if (/^(hi|hello|hey)\b/.test(message)) {
+        return "Hello! 👋 Welcome to CodeAlpha Basic Chatbot. How can I help you?";
+      }
+
+      if (message.includes("how are you")) {
+        return "I'm doing great! Thanks for asking. How are you?";
+      }
+
+      if (message.includes("your name") || message.includes("who are you")) {
+        return "I'm the CodeAlpha Basic Chatbot, a simple rule-based chatbot project.";
+      }
+
+      if (message.includes("codealpha")) {
+        return "CodeAlpha provides internship and learning opportunities for students.";
+      }
+
+      if (message.includes("college")) {
+        return "This project is presented for B.Tech (CSE), IIMT College of Engineering.";
+      }
+
+      if (message.includes("your creator") || message.includes("who made you")) {
+        return "I'm a demo chatbot created using HTML, CSS, and JavaScript.";
+      }
+
+      if (message.includes("help")) {
+        return "You can say hello, ask my name, ask how I am, or ask about this project.";
+      }
+
+      if (message.includes("thank")) {
+        return "You're welcome! 😊";
+      }
+
+      if (message.includes("time")) {
+        return "Your local time is " +
+          new Date().toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit"
+          }) + ".";
+      }
+
+      if (message.includes("date")) {
+        return "Today's date is " + new Date().toLocaleDateString() + ".";
+      }
+
+      if (/^(bye|goodbye)\b/.test(message)) {
+        return "Goodbye! 👋 Thanks for chatting. Type another message whenever you like.";
+      }
+
+      return "I'm not sure how to answer that yet. Try asking about my name, CodeAlpha, or this project.";
+    }
+
+    chatForm.addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const message = userInput.value.trim();
+      if (!message) return;
+
+      addMessage(message, "user");
+      userInput.value = "";
+
+      const response = getBotResponse(message);
+      addMessage(response, "bot");
+      userInput.focus();
+    });
+
+    document.getElementById("clear-chat").addEventListener("click", function() {
+      chatBox.replaceChildren();
+      showWelcome();
+      userInput.focus();
+    });
+
+    function showWelcome() {
+      addMessage(
+        "Hello! 👋 Welcome to CodeAlpha Basic Chatbot.\nType 'help' to see what you can ask me.",
+        "bot"
+      );
+    }
+
+    showWelcome();
+  </script>
+</body>
+</html>
